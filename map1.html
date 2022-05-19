@@ -44,14 +44,14 @@
                 maxzoom: 15,
                 paint: {
                     // increase weight as diameter breast height increases
-                    'heatmap-weight': {
-                        property: 'dbh',
-                        type: 'exponential',
-                        stops: [
-                            [1, 0],
-                            [62, 1]
-                        ]
-                    },
+                    // 'heatmap-weight': {
+                    //     property: 'dbh',
+                    //     type: 'exponential',
+                    //     stops: [
+                    //         [1, 0],
+                    //         [62, 1]
+                    //     ]
+                    // },
                     // increase intensity as zoom level increases
                     'heatmap-intensity': {
                         stops: [
@@ -78,8 +78,8 @@
                     // increase radius as zoom increases
                     'heatmap-radius': {
                         stops: [
-                            [11, 15],
-                            [15, 20]
+                            [11, 7],
+                            [15, 10]
                         ]
                     },
                     // decrease opacity to transition into the circle layer
