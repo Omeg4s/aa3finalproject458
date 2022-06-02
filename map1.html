@@ -186,6 +186,12 @@
                 'waterway-label'
             );
 
+            map.setFilter("vehicle-heat", [
+                        "==",
+                        ["number", ["get", "Year"]],
+                        2012
+                    ]);
+
             document
                 .getElementById("slider")
                 .addEventListener("input", function (e) {
