@@ -1,50 +1,200 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Seattle Motor Vehicle Thefts</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
-    </head>
-    <body>
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="#">Motor Vehicle Thefts in Seattle (2007-Present)</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">About Us</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <!-- Page content-->
-        <div class="container">
-            <div class="text-center mt-5" id="main-container">
-                <div id="map-left">
-                    <div id="time-slider">
-                        <img src="img/timeslider-placeholder.png" alt="time slider placeholder" style="width: 120%">
-                    </div>
-                    <div id="description">
-                        <img src="img\img1.png" alt="crime picture" style="width: 95%">
-                        <p>Our map will be able to display the Motor Vehicle thefts by year in the city of Seattle. The user will be able to choose the year that is displayed and even zoom into the specific street or block to see exactly where the vehicle theft occurred. When clicking on a specific point the user will be able to see the time when the vehicle was considered stolen as well as the ‘100’ level block address logged by the police.</p>
-                    </div>
-                </div>
-                <div id="map-container">
-                    <img src="img/map-placeholder.png" alt="placeholder map">
-                </div>
+<html lang='en'>
 
+<head>
+    <meta charset='utf-8' />
+    <title>Seattle Motor Vehicle Thefts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link href="css/styles.css" rel="stylesheet" />
+
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+
+<body>
+    <!-- Responsive navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div id="navbar" class="container">
+            <a class="navbar-brand" href="/index.html">Motor Vehicle Thefts in Seattle (2012-Present)</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about.html">About Us</a></li>
+                </ul>
             </div>
         </div>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-    </body>
+    </nav>
+    <div id='map'></div>
+    <div id='console'>
+        <!-- <h1>Motor vehicle theft</h1>
+        <p>Data: <a href=''>Motor vehicle theft</a> in Seattle, 2012 to Present</p> -->
+
+        <div class='session' id='sliderbar'>
+            <h1>Year: <label id="active-year">2012</label></h1>
+            <input id="slider" class="row" type="range" min="2012" max="2022" step="?" value="2012" />
+        </div>
+        
+        <div class="text-center" id="main-container">
+            <div id="description">
+                <img src="img\img1.png" alt="crime picture" style="width: 95%" id="crime-pic">
+                <p>Our map displays the Motor Vehicle thefts by year in the city of Seattle. The user is able to choose the year that is displayed and even zoom into the specific street or block to see exactly where the vehicle theft occurred.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoiYW50aGVhbGkiLCJhIjoiY2wydGp3eHRyMDR6ZjNxbm9taWhmdHRrbSJ9.PaLgs9MdLUDuZHuErFc_RQ';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v10',
+            center: [-122.3376535682928, 47.64497456546482],
+            zoom: 11
+        });
+
+        map.on('load', () => {
+            map.addSource('vehicle-theft', {
+                type: 'geojson',
+                data: 'assets/Vehicle_Theft.geojson'
+            });
+            map.addLayer({
+                    id: 'vehicle-heat',
+                    type: 'heatmap',
+                    source: 'vehicle-theft',
+                    maxzoom: 15,
+                    paint: {
+                        // increase weight as diameter breast height increases
+                        // 'heatmap-weight': {
+                        //     property: 'dbh',
+                        //     type: 'exponential',
+                        //     stops: [
+                        //         [1, 0],
+                        //         [62, 1]
+                        //     ]
+                        // },
+                        // increase intensity as zoom level increases
+                        'heatmap-intensity': {
+                            stops: [
+                                [11, 1],
+                                [15, 3]
+                            ]
+                        },
+                        // assign color values be applied to points depending on their density
+                        'heatmap-color': [
+                            'interpolate',
+                            ['linear'],
+                            ['heatmap-density'],
+                            0,
+                            'rgba(236,222,239,0)',
+                            0.2,
+                            'rgb(208,209,230)',
+                            0.4,
+                            'rgb(166,189,219)',
+                            0.6,
+                            'rgb(103,169,207)',
+                            0.8,
+                            'rgb(28,144,153)'
+                        ],
+                        // increase radius as zoom increases
+                        'heatmap-radius': {
+                            stops: [
+                                [11, 7],
+                                [15, 10]
+                            ]
+                        },
+                        // decrease opacity to transition into the circle layer
+                        'heatmap-opacity': {
+                            default: 1,
+                            stops: [
+                                [14, 1],
+                                [15, 0]
+                            ]
+                        }
+                    }
+                },
+                'waterway-label'
+            );
+            map.addLayer({
+                    id: 'vehicle-point',
+                    type: 'circle',
+                    source: 'vehicle-theft',
+                    minzoom: 14,
+                    paint: {
+                        // increase the radius of the circle as the zoom level and dbh value increases
+                        'circle-radius': {
+                            property: 'dbh',
+                            type: 'exponential',
+                            stops: [
+                                [{
+                                    zoom: 15,
+                                    value: 1
+                                }, 5],
+                                [{
+                                    zoom: 15,
+                                    value: 62
+                                }, 10],
+                                [{
+                                    zoom: 22,
+                                    value: 1
+                                }, 20],
+                                [{
+                                    zoom: 22,
+                                    value: 62
+                                }, 50]
+                            ]
+                        },
+                        'circle-color': {
+                            property: 'dbh',
+                            type: 'exponential',
+                            stops: [
+                                [0, 'rgba(236,222,239,0)'],
+                                [10, 'rgb(236,222,239)'],
+                                [20, 'rgb(208,209,230)'],
+                                [30, 'rgb(166,189,219)'],
+                                [40, 'rgb(103,169,207)'],
+                                [50, 'rgb(28,144,153)'],
+                                [60, 'rgb(1,108,89)']
+                            ]
+                        },
+                        'circle-stroke-color': 'white',
+                        'circle-stroke-width': 1,
+                        'circle-opacity': {
+                            stops: [
+                                [14, 0],
+                                [15, 1]
+                            ]
+                        }
+                    }
+                },
+                'waterway-label'
+            );
+
+            map.setFilter("vehicle-heat", [
+                        "==",
+                        ["number", ["get", "Year"]],
+                        2012
+                    ]);
+
+            document
+                .getElementById("slider")
+                .addEventListener("input", function (e) {
+                    var year = parseInt(e.target.value);
+                    // update the map
+                    map.setFilter("vehicle-heat", [
+                        "==",
+                        ["number", ["get", "Year"]],
+                        year
+                    ]);
+
+
+                    // update text in the UI
+                    document.getElementById("active-year").innerText = year
+                });
+        });
+
+
+        // we will add more code here in the next steps
+    </script>
+</body>
+
 </html>

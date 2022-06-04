@@ -64,11 +64,11 @@
   --bs-body-bg: #fff;
 }
 
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
-}
+} */
 
 @media (prefers-reduced-motion: no-preference) {
   :root {
@@ -639,7 +639,7 @@ progress {
   margin-right: auto;
   margin-left: auto;
 }
-
+/* 
 @media (min-width: 576px) {
   .container-sm, .container {
     max-width: 540px;
@@ -652,7 +652,7 @@ progress {
 }
 @media (min-width: 992px) {
   .container-lg, .container-md, .container-sm, .container {
-    max-width: 960px;
+    max-width: 100%;
   }
 }
 @media (min-width: 1200px) {
@@ -664,7 +664,7 @@ progress {
   .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
     max-width: 1320px;
   }
-}
+} */
 .row {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
@@ -4035,6 +4035,7 @@ textarea.form-control-lg {
   justify-content: space-between;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  z-index: 1;
 }
 .navbar > .container,
 .navbar > .container-fluid,
@@ -4227,10 +4228,6 @@ textarea.form-control-lg {
   }
 }
 @media (min-width: 992px) {
-  .navbar-expand-lg {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-  }
   .navbar-expand-lg .navbar-nav {
     flex-direction: row;
   }
@@ -7320,7 +7317,7 @@ textarea.form-control-lg {
 }
 
 .mt-5 {
-  margin-top: 3rem !important;
+  margin-top: 2rem !important;
 }
 
 .mt-auto {
@@ -11288,6 +11285,11 @@ textarea.form-control-lg {
 }
 
 /* custom styles */
+#navbar {
+  margin: 0;
+  width: 100%;
+}
+
 #main-container {
   display: flex;
   flex-direction: row;
@@ -11301,4 +11303,100 @@ textarea.form-control-lg {
 
 #description > p {
   text-align: left;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+h1 {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+h2 {
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: #2dc4b2;
+}
+
+#console {
+  position: absolute;
+  width: 240px;
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: white;
+}
+
+#sliderbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1.3rem;
+}
+
+#slider {
+  width: 100%;
+}
+
+#crime-pic {
+  margin-bottom: 1rem;
+}
+
+#about-container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 0.5rem;
+  padding: 0.7rem;
+  flex: 1;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* flex-wrap: wrap; */
+
+}
+
+#bios {
+  padding: 2rem;
+}
+
+.single-bio {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 1rem;
+  flex: 1;
+}
+
+.single-bio > p {
+  font-size: .95rem;
+}
+
+.profile-pic {
+  margin-bottom: 0.7rem;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  padding-left: 1rem;
+}
+
+#acknowl-container {
+  padding: 1rem;
 }
